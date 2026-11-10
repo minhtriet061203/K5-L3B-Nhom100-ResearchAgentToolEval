@@ -83,17 +83,17 @@ Lấy từ `results[*].result.failures` trong run JSON.
 
 | Case ID | Failure Type | Actual Tool Calls | What Failed | Fix |
 |---|---|---|---|---|
-| R03_web_news_routing | wrong_tool (observed: wrong_arg_value) | `lookup(query="AI news", topic=news, timeframe=day)` | Routing đúng nhưng `query` thêm chữ "news" thay vì chỉ "AI" | v2: tools.yaml quy ước `query` chỉ chứa chủ đề cốt lõi |
+| R03_web_news_routing | wrong_tool (observed: wrong_arg_value) | `lookup(query="AI news", topic=news, timeframe=day)` | Routing đúng nhưng `query` thêm chữ "news" thay vì chỉ "AI" | v1: prompt mới (scope + rule gọi tool) — R03 PASS từ v1; v3 ghi thêm quy ước `query` chỉ chứa chủ đề cốt lõi trong tools.yaml |
 | R08_out_of_scope | out_of_scope | `send(text="Nguyên hàm của x^2 là x^3/3 + C…")` | Câu toán ngoài phạm vi nhưng vẫn gọi tool `send` | v1: bỏ "Pick one tool", thêm phạm vi, ngoài phạm vi thì không gọi tool |
 | R10_missing_handle | missing_info | `timeline(screenname="sama")` | Không có account, model đoán Sam Altman theo prompt gốc | v1: bỏ chỉ dẫn đoán account; thiếu handle → `clarify` |
 | R11_missing_url | missing_info | `fetch(url="https://example.com/article")` | Bịa URL theo prompt gốc "assume a likely URL" | v1: bỏ chỉ dẫn đó; thiếu URL → `clarify` |
-| R12_confirm_before_send | wrong_boundary | `send(text="Bản tin này đã được đăng lên Telegram.")` | Gửi ngay khi chưa xác nhận | v1: trước `send` phải `clarify(response_type=yes_no)` |
-| R13_parallel_web_and_tweets | wrong_tool (observed: wrong_arg_value) | `lookup(query="AI", timeframe=day)` + `social_search(query="AI")` | Gọi đủ 2 tool nhưng thiếu `topic=news` | v2: quy ước "tin tức" → `topic=news` |
+| R12_confirm_before_send | wrong_boundary | `send(text="Bản tin này đã được đăng lên Telegram.")` | Gửi ngay khi chưa xác nhận | v1 thêm bước clarify nhưng model dùng `response_type=text` → vẫn FAIL; v2: ghi rõ "chỉ `send` cần `yes_no`" → PASS |
+| R13_parallel_web_and_tweets | wrong_tool (observed: wrong_arg_value) | `lookup(query="AI", timeframe=day)` + `social_search(query="AI")` | Gọi đủ 2 tool nhưng thiếu `topic=news` | v1 PASS nhưng không ổn định (v2 lại FAIL); v3: tools.yaml quy ước "tin tức" → `topic=news` → PASS |
 | R14_out_of_scope_coding | out_of_scope | `send(text="def fibonacci(n): …")` | Yêu cầu code ngoài phạm vi nhưng vẫn gọi `send` | v1: giống R08 |
 
 Run v0: `starter_v0/runs/v0_B_base_openrouter_20261110T175213197182.json` — case_accuracy 0.65 (13/20), routing 0.75, args 0.65, multiturn 1.0, provider_error_cases 0.
 
-Nhận xét: 5/7 lỗi (R08, R10, R11, R12, R14) đến từ chỉ dẫn xấu cố ý trong `system_prompt.md` gốc (đoán thay vì hỏi, gửi không xác nhận, ép gọi một tool). 2/7 lỗi (R03, R13) là sai giá trị args do `tools.yaml` thiếu quy ước `query`/`topic`.
+Nhận xét: 5/7 lỗi (R08, R10, R11, R12, R14) đến từ chỉ dẫn xấu cố ý trong `system_prompt.md` gốc (đoán thay vì hỏi, gửi không xác nhận, ép gọi một tool). 2/7 lỗi (R03, R13) là sai giá trị args do chưa có quy ước `query`/`topic`: R03 hết lỗi khi viết lại prompt ở v1, còn R13 chỉ PASS ổn định khi `tools.yaml` có quy ước args ở v3.
 ### B3. Team Eval Cases
 
 Liệt kê đúng 10 case trong `starter_v0/data/eval_group.json` (5 single turn + 5 multi turn).

@@ -11,7 +11,7 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | _(thành viên tự điền)_ | | | `minhtriet061203` | Baseline v0, tối ưu v1–v3, failure analysis B1/B2 |
+|   1 | Nguyễn Minh Triết | 2A202603995 | 26ai.trietnm2@vinuni.edu.vn | `minhtriet061203` | Baseline v0, tối ưu v1–v3, failure analysis B1/B2 |
 |   2 | _(thành viên tự điền)_ | | | `w3schools-test` | Tool mới `text_stats`, `date_diff`, `dedupe` + unit test + 3 case group đầu |
 |   3 | Khương Hoàng Nguyên | 2A202603987 | 26ai.nguyenkh@vinuni.edu.vn | `NguyenGL03` | CP3 test challenge + sửa bug tool có sẵn, CP4 eval group, live chat + Telegram thật, bonus Small Local Model, báo cáo |
 
@@ -25,7 +25,7 @@ report/team/MSSV_HoTen.md
 
 Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
-## minhtriet061203 _(HoVaTen-MSSV: thành viên tự điền)_
+## NguyenMinhTriet-2A202603995
 
 ### Phần việc phụ trách
 
