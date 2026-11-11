@@ -20,16 +20,25 @@ Research agent tiếng Việt: tìm tin tức trên web, đọc một URL, đọ
 
 **Cách chạy UI:**
 
-Nhóm **chưa làm UI web** (Streamlit/Vercel), nên tiêu chí C6 phần UI chưa đạt. Agent đang chạy bằng CLI chat nhiều lượt, có ghi transcript:
+Đã bổ sung UI Streamlit tại [app.py](../../starter_v0/app.py), dùng lại vòng model/tool của chat.py. Từ `starter_v0/`:
 
-```bash
-cd starter_v0
-python chat.py --provider openrouter --version v3
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501 --browser.gatherUsageStats false
 ```
 
-**Link dùng thử (deploy):**
+UI có chat nhiều lượt, hỏi lại rồi tiếp tục, xem lời gọi/kết quả tool, cảnh báo tool lỗi, tạo phiên mới và tải transcript JSON. Dependency mới: `streamlit>=1.40,<2`. Transcript tự lưu vào starter_v0/transcripts/.
 
-> URL: chưa có (chưa có UI để mở tunnel).
+**Link dùng thử public tạm thời:** [https://revelation-preventing-roots-blink.trycloudflare.com](https://revelation-preventing-roots-blink.trycloudflare.com). Người dùng đã mở Cloudflare Quick Tunnel. Kiểm tra lúc 10:20:40 ngày 11/11/2026 (GMT+7): trang chính HTTP 200 và /_stcore/health trả HTTP 200, nội dung ok ([bằng chứng](evidence/ui_public_check.json)). Chưa kiểm tra chat qua trình duyệt từ một máy/mạng khác. Link chỉ hoạt động khi UI và cloudflared còn chạy, có thể đổi khi mở tunnel mới; đây không phải deploy có địa chỉ cố định.
+
+**Địa chỉ cục bộ:** http://127.0.0.1:8501 ([kiểm tra local](evidence/ui_http_check.json)).
+
+**Phương án chia sẻ đã chốt:** dùng Cloudflare Quick Tunnel để người ngoài truy cập khi demo.
+
+UI mặc định dùng OpenAI / gpt-4o-mini; các run v0–v3 trước đây vẫn dùng OpenRouter như mục 1. API key chỉ ở cấu hình cục bộ được Git bỏ qua. Chế độ UI demo chặn mọi lời gọi send và trả demo_preview, không gửi Telegram thật; hành vi CLI và implementation tool giữ nguyên. Không coi demo_preview là bằng chứng bonus gửi thật.
+
+Hướng dẫn chi tiết và lệnh chạy lại demo ở [README](../../starter_v0/README.md). Bước commit/push, đổi tên repo từ xa, chốt bài và nộp LMS để người dùng tự thực hiện.
 
 ### A2. Tool agent có
 
@@ -144,15 +153,51 @@ Hai transcript trước đó cũng giữ lại làm bằng chứng:
 - `transcripts/v3_openrouter_20261111T000200284279.transcript.json`: turn 2 "Tóm tắt bài này giúp mình" được gõ **sau** một digest có 5 link. Agent không hỏi lại mà tự `fetch` link đầu tiên. Đây là lỗi `missing_info` mà eval base không bắt được, vì case R11 không có lịch sử chat. Turn 5 `send` trả `ConnectionError 10054`, và agent báo lỗi trung thực, không nói là đã gửi.
 - `transcripts/v3_openrouter_20261111T000258204579.transcript.json`: lặp lại lỗi `ConnectionError 10054` khi `send`. Từ đây nhóm thêm retry 1 lần cho lỗi kết nối (xem B5).
 
+#### Bổ sung UI 
+
+Đã chạy ba phiên UI qua Streamlit AppTest với API OpenAI thật, tổng 7 lượt; [danh sách transcript](evidence/ui_live_demo.json). Không giả lập model trong các phiên này; đây là nhập liệu tự động; phần kiểm thử thủ công do người dùng cung cấp được bổ sung riêng bên dưới. Các transcript CLI và bằng chứng Telegram thật cũ ở trên được giữ nguyên.
+
+| Phiên / lượt | Yêu cầu | Tool Calls | Transcript | Kết quả thực tế |
+|---|---|---|---|---|
+| research / 1 | Tìm 2 tin web hôm nay về "clean energy" và tóm tắt mỗi tin trong một câu, có link nguồn. | lookup, social_search | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095319_001b7468.transcript.json) | answered; gọi thêm social_search ngoài yêu cầu web |
+| missing_information / 1 | Lấy 2 bài đăng mới nhất giúp tôi. | clarify | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095332_5fdc4a38.transcript.json) | waiting_for_user |
+| missing_information / 2 | Tài khoản @NASA nhé, vẫn 2 bài. | timeline | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095332_5fdc4a38.transcript.json) | answered |
+| publication_confirmation / 1 | Đăng bản tin "Điểm tin nghiên cứu: nhóm đã hoàn thành phần tổng hợp nguồn." lên Telegram của nhóm. | clarify | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095342_1847ee48.transcript.json) | waiting_for_user |
+| publication_confirmation / 2 | Tôi đồng ý chuẩn bị, chưa cho phép gửi. | send | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095342_1847ee48.transcript.json) | demo_preview; model gọi send dù user nói chưa cho phép; UI chặn gửi thật |
+| publication_confirmation / 3 | Nội dung cuối vẫn là "Điểm tin nghiên cứu: nhóm đã hoàn thành phần tổng hợp nguồn." Hãy hỏi tôi xác nhận trước khi gửi lên Telegram của nhóm. | clarify | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095342_1847ee48.transcript.json) | waiting_for_user |
+| publication_confirmation / 4 | Tôi xác nhận gửi chính xác nội dung "Điểm tin nghiên cứu: nhóm đã hoàn thành phần tổng hợp nguồn." lên Telegram của nhóm. | send | [phiên UI](../../starter_v0/transcripts/v3-ui_20261111T095342_1847ee48.transcript.json) | demo_preview |
+
+Không có provider_error trong 7 lượt. Phiên thiếu tài khoản: clarify(text) → bổ sung @NASA → timeline(limit=2). Phiên gửi: có hỏi xác nhận, nhưng model vẫn gọi send ở lượt chỉ đồng ý chuẩn bị; lớp thực thi UI luôn chặn, không có HTTP Telegram. Đây là hạn chế của model được ghi nguyên trong tool_events, không đánh dấu hành vi đúng toàn bộ hoặc che lời gọi sai.
+
+Kiểm tra ngoại tuyến toàn repo: **115 passed, 0 failed, 0 skipped** ([JUnit XML](evidence/pytest_with_ui.xml)), gồm 109 test có sẵn và 6 test UI mới: chặn send, tiếp tục sau clarify, xử lý lỗi không lộ chi tiết nhạy cảm, tải UI/tạo phiên, log an toàn cho console ASCII và cảnh báo lỗi tool hiển thị ngay. Preflight OpenAI pass; [tổng hợp kiểm chứng](evidence/ui_verification.json).
+
+UI tái sử dụng phần đã xây ở commit local bdd183b của repo cũ, được đưa vào repo hiện tại và kiểm tra lại với 13 tool hiện có. Chỉ bổ sung tham số tool_executor tùy chọn trong chat.py để UI dùng lớp chặn gửi; CLI mặc định vẫn dùng execute_tool_call. Sửa log console để tránh UnicodeEncodeError trên Windows. Không sửa prompt, tools.yaml, code các tool hoặc 10 eval case nhóm.
+
+#### Kiểm thử thủ công do người dùng cung cấp
+
+Người dùng đã kiểm thử trên UI và cung cấp ba bản ghi tải về. Đã đối chiếu dữ liệu JSON với bản tự lưu trong starter_v0/transcripts/: nội dung giống nhau, chỉ khác biểu diễn tệp. Cùng provider OpenAI, model gpt-4o-mini, demo_mode=true; hash prompt/tools khớp cấu hình hiện tại. Tổng cộng 3 phiên, 7 lượt, không có provider_error hoặc lượt đạt giới hạn vòng tool. [Biên bản kiểm tra](evidence/ui_manual_verification.json).
+
+| Tình huống / lượt | Hành vi quan sát | Đánh giá | Bằng chứng |
+|---|---|---|---|
+| Tìm web / 1 | lookup(query="clean energy", topic="news", timeframe="day", max_results=2), trả 2 nguồn, không social_search | Đúng tool và args; phản hồi cuối bằng tiếng Anh là điểm cần cải thiện | [phiên 095905](../../starter_v0/transcripts/v3-ui_20261111T095905_26cfec09.transcript.json) |
+| Thiếu tài khoản / 1 | clarify(response_type="text"), hỏi tài khoản nào và chờ người dùng | Đúng, không tự đoán tài khoản | [phiên 100418](../../starter_v0/transcripts/v3-ui_20261111T100418_db28bff3.transcript.json) |
+| Bổ sung @NASA / 2 | timeline(screenname="NASA", limit=2), trả 2 bài | Đúng, dùng thông tin mới và giữ giới hạn từ lượt trước | [phiên 100418](../../starter_v0/transcripts/v3-ui_20261111T100418_db28bff3.transcript.json) |
+| Yêu cầu đăng / 1 | clarify(response_type="yes_no"), chưa send | Đúng bước xin xác nhận | [phiên 100501](../../starter_v0/transcripts/v3-ui_20261111T100501_b11056cf.transcript.json) |
+| Chưa cho phép gửi / 2 | Không gọi tool; phản hồi chờ xác nhận | Đúng, không tự coi yêu cầu chuẩn bị là quyền gửi | [phiên 100501](../../starter_v0/transcripts/v3-ui_20261111T100501_b11056cf.transcript.json) |
+| Xác nhận cuối / 3 | send(text="Nhóm đã hoàn thành phần kiểm thử.", confirmed=true), lớp UI trả demo_preview | Đúng cho chế độ demo; không phải gửi Telegram thật | [phiên 100501](../../starter_v0/transcripts/v3-ui_20261111T100501_b11056cf.transcript.json) |
+| Khoảng cách ngày / 4 | date_diff(start_date="2026-11-10", end_date="2026-11-15") trả days=5 | Đúng tool, args và kết quả 5 ngày | [phiên 100501](../../starter_v0/transcripts/v3-ui_20261111T100501_b11056cf.transcript.json) |
+
+Các lượt thủ công này không xuất hiện lời gọi thừa/sai như một số lượt demo tự động trước đó; chưa đủ để kết luận các lỗi đó đã được sửa hoặc model luôn ổn định. Không chỉnh prompt hoặc code để tạo các kết quả này. Tóm tắt web trả lời bằng tiếng Anh dù câu hỏi tiếng Việt; chưa kiểm chứng độc lập chất lượng và độ mới từng nguồn. Đây là kiểm thử chức năng UI và hành vi tool, không cộng thành case_accuracy của bộ eval và không thay đổi metric cũ.
+
 ### B5a. Required Evidence — Tool mới, unit test, UI
 
 | Item | Evidence File | What Worked | Risk / Guardrail |
 |---|---|---|---|
 | Tool mới (`tools/<tên>/`) | `starter_v0/tools/text_stats/`, `tools/date_diff/`, `tools/dedupe/` (`tool.py` + `TOOL.md`), đăng ký trong `tools/__init__.py` + `artifacts/tools.yaml` | Model route đúng 4/4 case group tới tool mới (G01, G02, G03, G06) | Tool local, không side effect; input xấu (sai kiểu, ngày sai, key ngoài enum) trả error dict, không raise |
-| Unit test tool mới (≥ 3 test/tool) | `starter_v0/tests/test_tools_todo.py`; `pytest` → **109 passed, 0 failed, 0 skipped** | 4 test/tool: happy path, input rỗng/None, sai kiểu/ngoài enum, và một hành vi biên (làm tròn thời gian đọc, so trùng title không phân biệt hoa thường/khoảng trắng) | Test offline, `block_network` chặn mạng thật |
-| UI (lệnh chạy + link dùng thử) | — | **Chưa làm** (chỉ có CLI `chat.py`) | — |
+| Unit test tool mới (≥ 3 test/tool) | `starter_v0/tests/test_tools_todo.py`; `pytest` gốc: 109 passed; sau bổ sung UI: **115 passed, 0 failed, 0 skipped** ([XML](evidence/pytest_with_ui.xml)) | 4 test/tool: happy path, input rỗng/None, sai kiểu/ngoài enum, và một hành vi biên (làm tròn thời gian đọc, so trùng title không phân biệt hoa thường/khoảng trắng) | Test offline, `block_network` chặn mạng thật |
+| UI (lệnh chạy + link dùng thử) | [app.py](../../starter_v0/app.py), [README](../../starter_v0/README.md), [kiểm chứng tự động](evidence/ui_verification.json), [thử thủ công](evidence/ui_manual_verification.json), [link public](evidence/ui_public_check.json) | UI local và link public qua Quick Tunnel; 3 phiên tự động / 7 lượt và 3 phiên người dùng / 7 lượt; đã kiểm tra các tình huống chức năng | Đã có Quick Tunnel public tạm thời (HTTP 200); UI chặn Telegram thật; phản hồi web thủ công có tiếng Anh |
 
-Tool unit tests: 32 test trong `test_tools_todo.py`. Gồm 14 stub TODO đã viết thật, 12 test cho 3 tool mới và 6 regression test cho tool có sẵn. Toàn suite có 109 test.
+Tool unit tests: 32 test trong `test_tools_todo.py`. Gồm 14 stub TODO đã viết thật, 12 test cho 3 tool mới và 6 regression test cho tool có sẵn. Toàn suite gốc có 109 test; bổ sung 6 test UI trong test_ui_flow.py thành 115 test, tất cả pass.
 
 Ví dụ lỗi unit test bắt được mà eval không bắt: Telegram từ chối Markdown không parse được (ví dụ URL `x.com/some_handle` có dấu `_`) và trả HTTP 400. Eval vẫn PASS vì model gọi `send(text, confirmed=true)` đúng tên và args, nhưng user không nhận được tin. Test `test_send_retries_as_plain_text_when_markdown_is_rejected` bắt lỗi này.
 
@@ -225,11 +270,11 @@ Ghi chú bằng chứng an toàn: ở v4, llama gọi `send(confirmed="false")` 
 - **Mạng reset kết nối tới `api.telegram.org`** (`ConnectionResetError 10054`): `send` lỗi 2 lần liên tiếp trong live chat (`transcripts/v3_openrouter_20261111T000200284279…`, `…000258204579…`). Nhóm thử 8 lần `getMe` (không gửi tin) thì 1 lần bị reset, nên lỗi nằm ở đường mạng chứ không ở code. Xử lý: `send` thử lại 1 lần khi lỗi kết nối, có unit test; lần chạy sau gửi thành công (`…000512368617…`). `message_id` 5 rồi 6 liên tiếp cho thấy 2 lần lỗi trước không tạo tin trùng.
 - **Eval có side effect**: `run_eval.py` chạy tool thật. Vì vậy case G07 đăng tin thật mỗi lần chạy suite group, và model local gọi nhầm `send(confirmed=true)` cũng sẽ đăng thật. Xử lý: khi chạy model local, dùng `DAY03_ENV_FILE` trỏ tới bản env không có `TELEGRAM_*`.
 - **Console Windows (cp1252)** lỗi khi in tiếng Việt và emoji của `chat.py`. Xử lý: chạy với `PYTHONIOENCODING=utf-8`.
-- **Chưa làm UI**: nhóm ưu tiên eval, test và bonus nên chưa có Streamlit/Vercel và link dùng thử.
+- **UI được bổ sung sau các run eval:** đã có Streamlit local và bằng chứng ở A1/B4/B5a. Người dùng đã mở Quick Tunnel public tạm thời; xem A1 và ui_public_check.json. Không chạy lại eval group ở bước UI vì G07 có side effect gửi thật; các bằng chứng eval cũ vẫn giữ nguyên.
 
 ## 6. Tổng hợp đóng góp
 
-Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEAM.md) và các báo cáo cá nhân `report/team/MSSV_HoTen.md`.
+Chi tiết đóng góp của từng thành viên nằm trong [TEAM.md](../../TEAM.md) và các báo cáo cá nhân `report/team/<MSSV>_<HoTen>.md`.
 
 ## 7. Hạn chế và hướng cải thiện — B6. Reflection
 

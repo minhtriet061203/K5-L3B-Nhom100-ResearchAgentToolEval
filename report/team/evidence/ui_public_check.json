@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-11-11T10:20:40",
+  "url": "https://revelation-preventing-roots-blink.trycloudflare.com",
+  "kind": "temporary_cloudflare_quick_tunnel",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "health": null
+    },
+    {
+      "path": "/_stcore/health",
+      "status": 200,
+      "health": "ok"
+    }
+  ],
+  "scope": "Kiểm tra HTTP trang chính và health từ đường dẫn public; chưa kiểm tra chat qua trình duyệt bên ngoài máy.",
+  "created_by": "user",
+  "expires_when": "Tunnel hoặc UI dừng; URL thay đổi khi tạo tunnel mới."
+}

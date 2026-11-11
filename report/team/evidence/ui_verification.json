@@ -1,0 +1,40 @@
+{
+  "provider_preflight": {
+    "command": "python scripts/preflight_provider.py --provider openai --model gpt-4o-mini",
+    "exit_code": 0,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "tool": "timeline",
+    "args": {
+      "screenname": "sama",
+      "limit": 1
+    }
+  },
+  "pytest": {
+    "passed": 115,
+    "failed": 0,
+    "skipped": 0,
+    "file": "report/team/evidence/pytest_with_ui.xml"
+  },
+  "http_check": "report/team/evidence/ui_http_check.json",
+  "live_demo": "report/team/evidence/ui_live_demo.json",
+  "protected_files_unchanged": [
+    "starter_v0/artifacts/system_prompt.md",
+    "starter_v0/artifacts/tools.yaml",
+    "starter_v0/data/eval_base.json",
+    "starter_v0/data/eval_group.json",
+    "starter_v0/data/eval_research_extension.json"
+  ],
+  "live_turns": 7,
+  "ui_source_commit_in_previous_local_repo": "bdd183b",
+  "limitations": [
+    "Chưa kiểm tra hình ảnh bằng trình duyệt tự động; UI được thao tác bằng Streamlit AppTest.",
+    "Chỉ localhost, chưa có URL public.",
+    "Lượt nghiên cứu model gọi thêm social_search; lượt đồng ý chuẩn bị nhưng chưa cho gửi model vẫn gọi send, lớp demo đã chặn gửi thật."
+  ],
+  "code_hashes": {
+    "starter_v0/app.py": "1d1c3a9fcaa72c9df00c54b452d8f1b40698c36d03f47de4f05a1b168eec8d6f",
+    "starter_v0/chat.py": "19003fdab9fbb44fe4d7f0b664f004415094cad5eba5f53e2c9295c54f1d6c6b",
+    "starter_v0/tests/test_ui_flow.py": "72f38de50974c84f71433909ea8e8594fd28cbd57093b66049a61210de043904"
+  }
+}

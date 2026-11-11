@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-11-11T09:54:13",
+  "url": "http://127.0.0.1:8501",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "health": null
+    },
+    {
+      "path": "/_stcore/health",
+      "status": 200,
+      "health": "ok"
+    }
+  ]
+}
