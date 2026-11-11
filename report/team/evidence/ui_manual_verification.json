@@ -1,0 +1,78 @@
+{
+  "source": "user_provided_ui_downloads",
+  "sessions": [
+    {
+      "file": "starter_v0/transcripts/v3-ui_20261111T095905_26cfec09.transcript.json",
+      "transcript_id": "v3-ui_20261111T095905_26cfec09",
+      "source_sha256": "87d3379d11447954f3c896021002667741c5fedc6c6323fea706c3a70869c4b5",
+      "repository_sha256": "eb1aec0b40b24ba69ec4d0b77c640227352030a4632a7948651e79422f731b4c",
+      "download_matches_saved_json": true,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "artifact_version": "v3-ui+pa0d4de52b5af+ta0961c079e72",
+      "turns": 1,
+      "statuses": [
+        "answered"
+      ]
+    },
+    {
+      "file": "starter_v0/transcripts/v3-ui_20261111T100418_db28bff3.transcript.json",
+      "transcript_id": "v3-ui_20261111T100418_db28bff3",
+      "source_sha256": "03d0e219feef08657a499d64bc00b3cb163e16b5df46fdb20650241eeae320bc",
+      "repository_sha256": "41937c0fc87a868103183672fe30fd283db7d35f56c0f2fc3d2085a27e40ee2f",
+      "download_matches_saved_json": true,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "artifact_version": "v3-ui+pa0d4de52b5af+ta0961c079e72",
+      "turns": 2,
+      "statuses": [
+        "waiting_for_user",
+        "answered"
+      ]
+    },
+    {
+      "file": "starter_v0/transcripts/v3-ui_20261111T100501_b11056cf.transcript.json",
+      "transcript_id": "v3-ui_20261111T100501_b11056cf",
+      "source_sha256": "84934ebd6a031947897a514140ea2517fc9725ee23b35267de7d6e6e58e8c16c",
+      "repository_sha256": "0bef282835647168ab945ec8f273fcd7eadc48a03223aa7b61b15fe97505bc8a",
+      "download_matches_saved_json": true,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "artifact_version": "v3-ui+pa0d4de52b5af+ta0961c079e72",
+      "turns": 4,
+      "statuses": [
+        "waiting_for_user",
+        "answered",
+        "demo_preview",
+        "answered"
+      ]
+    }
+  ],
+  "total_sessions": 3,
+  "total_turns": 7,
+  "provider_error_turns": 0,
+  "checks": [
+    {
+      "scenario": "web_research",
+      "result": "pass_tool_routing_and_arguments",
+      "observation": "lookup query=clean energy, topic=news, timeframe=day, max_results=2; 2 kết quả, không gọi social_search.",
+      "limitation": "Câu trả lời cuối bằng tiếng Anh; chưa kiểm chứng độc lập độ chính xác/tính thời sự của nội dung nguồn."
+    },
+    {
+      "scenario": "clarify_then_timeline",
+      "result": "pass",
+      "observation": "clarify response_type=text rồi timeline screenname=NASA, limit=2 sau khi người dùng cung cấp tài khoản."
+    },
+    {
+      "scenario": "publication_confirmation_and_decline",
+      "result": "pass_demo_boundary",
+      "observation": "clarify yes_no; từ chối thì không gọi tool; xác nhận cuối thì send confirmed=true chỉ trả demo_preview, không phải sent."
+    },
+    {
+      "scenario": "date_diff",
+      "result": "pass",
+      "observation": "start_date=2026-11-10, end_date=2026-11-15; kết quả days=5."
+    }
+  ],
+  "interpretation": "Bằng chứng kiểm thử thủ công người dùng cung cấp; không thay thế run eval hoặc cộng vào metric của bộ group. Không phải bằng chứng gửi Telegram thật."
+}

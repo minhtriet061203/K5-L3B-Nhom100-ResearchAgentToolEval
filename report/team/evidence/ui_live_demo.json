@@ -1,0 +1,27 @@
+[
+  {
+    "scenario": "research",
+    "file": "starter_v0/transcripts/v3-ui_20261111T095319_001b7468.transcript.json",
+    "statuses": [
+      "answered"
+    ]
+  },
+  {
+    "scenario": "missing_information",
+    "file": "starter_v0/transcripts/v3-ui_20261111T095332_5fdc4a38.transcript.json",
+    "statuses": [
+      "waiting_for_user",
+      "answered"
+    ]
+  },
+  {
+    "scenario": "publication_confirmation",
+    "file": "starter_v0/transcripts/v3-ui_20261111T095342_1847ee48.transcript.json",
+    "statuses": [
+      "waiting_for_user",
+      "demo_preview",
+      "waiting_for_user",
+      "demo_preview"
+    ]
+  }
+]

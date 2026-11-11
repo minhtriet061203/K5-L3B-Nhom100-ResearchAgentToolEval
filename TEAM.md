@@ -14,6 +14,7 @@
 |   1 | Nguyễn Minh Triết | 2A202603995 | 26ai.trietnm2@vinuni.edu.vn | `minhtriet061203` | Baseline v0, tối ưu v1–v3, failure analysis B1/B2 |
 |   2 | _(thành viên tự điền)_ | | | `w3schools-test` | Tool mới `text_stats`, `date_diff`, `dedupe` + unit test + 3 case group đầu |
 |   3 | Khương Hoàng Nguyên | 2A202603987 | 26ai.nguyenkh@vinuni.edu.vn | `NguyenGL03` | CP3 test challenge + sửa bug tool có sẵn, CP4 eval group, live chat + Telegram thật, bonus Small Local Model, báo cáo |
+|   4 | Phạm Lý Ngọc Đức | 2A202603991 | 26ai.ducpln@vinuni.edu.vn | https://github.com/Ducbaynao | Bổ sung UI Streamlit, kiểm thử, transcript UI và tài liệu |
 
 ## Cá nhân
 
@@ -59,7 +60,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 - CP3: hoàn thành test challenge (14 stub TODO), thêm test mới, tìm và sửa bug trong tool có sẵn.
 - CP4: eval nhóm đủ 10 case (5 single + 5 multi) và chạy `--suite group`.
-- CP5: live chat có transcript, viết báo cáo nhóm (Phần A, B3–B7, reflection). Phần UI chưa làm.
+
 - Bonus: `send` gửi Telegram thật sau xác nhận; Small Local Model Challenge.
 
 ### Đóng góp cụ thể
@@ -73,3 +74,25 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 ### Bằng chứng
 
 - Xem [report/team/2A202603987_KhuongHoangNguyen.md](report/team/2A202603987_KhuongHoangNguyen.md).
+
+## PhamLyNgocDuc-2A202603991
+
+### Phần việc phụ trách
+
+- CP5: đưa UI Streamlit đã có ở repo cũ sang repo nhóm hiện tại; tích hợp với chat.py và ghi transcript.
+
+### Đóng góp cụ thể
+
+- Thêm app.py, scripts/demo_ui.py, 6 test UI và dependency Streamlit; giữ nguyên prompt, tool declarations và eval cases.
+- Thêm điểm truyền tool_executor tùy chọn và log console ASCII trong chat.py; UI chặn gửi Telegram thật.
+- Thiết lập .venv, chạy lại toàn bộ test: 115 passed, 0 failed, 0 skipped; preflight OpenAI pass.
+- Thu 3 phiên UI qua API thật, 7 lượt; ghi nhận cả lời gọi thừa/sai của model thay vì coi mọi hành vi đều đúng.
+- Đối chiếu thêm 3 transcript kiểm thử thủ công do người dùng cung cấp (7 lượt): các thao tác chức năng mong đợi đều có bằng chứng; ghi rõ hạn chế phản hồi web bằng tiếng Anh.
+- Cập nhật A1, B4, B5a và hướng dẫn chạy. Local UI: http://127.0.0.1:8501. Người dùng đã mở Quick Tunnel public tạm thời: https://revelation-preventing-roots-blink.trycloudflare.com; kiểm tra trang chính và health HTTP 200, bằng chứng tại report/team/evidence/ui_public_check.json.
+
+### Bằng chứng
+
+- [Báo cáo cá nhân](report/team/2A202603991_PhamLyNgocDuc.md), [kiểm chứng UI](report/team/evidence/ui_verification.json), [pytest](report/team/evidence/pytest_with_ui.xml).
+- Nhánh hiện tại: 2A202603991_PhamLyNgocDuc. 
+- Phương án link dùng thử: Quick Tunnel public
+
