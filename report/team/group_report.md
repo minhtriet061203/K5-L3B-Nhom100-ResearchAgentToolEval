@@ -153,7 +153,7 @@ Hai transcript trước đó cũng giữ lại làm bằng chứng:
 - `transcripts/v3_openrouter_20261111T000200284279.transcript.json`: turn 2 "Tóm tắt bài này giúp mình" được gõ **sau** một digest có 5 link. Agent không hỏi lại mà tự `fetch` link đầu tiên. Đây là lỗi `missing_info` mà eval base không bắt được, vì case R11 không có lịch sử chat. Turn 5 `send` trả `ConnectionError 10054`, và agent báo lỗi trung thực, không nói là đã gửi.
 - `transcripts/v3_openrouter_20261111T000258204579.transcript.json`: lặp lại lỗi `ConnectionError 10054` khi `send`. Từ đây nhóm thêm retry 1 lần cho lỗi kết nối (xem B5).
 
-#### Bổ sung UI trên nhánh 2A202603991_PhamLyNgocDuc
+#### Bổ sung UI 
 
 Đã chạy ba phiên UI qua Streamlit AppTest với API OpenAI thật, tổng 7 lượt; [danh sách transcript](evidence/ui_live_demo.json). Không giả lập model trong các phiên này; đây là nhập liệu tự động; phần kiểm thử thủ công do người dùng cung cấp được bổ sung riêng bên dưới. Các transcript CLI và bằng chứng Telegram thật cũ ở trên được giữ nguyên.
 
