@@ -12,7 +12,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Nguyễn Minh Triết | 2A202603995 | 26ai.trietnm2@vinuni.edu.vn | `minhtriet061203` | Baseline v0, tối ưu v1–v3, failure analysis B1/B2 |
-|   2 | _(thành viên tự điền)_ | | | `w3schools-test` | Tool mới `text_stats`, `date_diff`, `dedupe` + unit test + 3 case group đầu |
+|   2 | Trịnh Ngọc Ninh | 2A202603996 | 26ai.ninhtn@vinuni.edu.vn | `ninhtrinhdev` (commit với tên `w3schools-test`) | Tool mới `text_stats`, `date_diff`, `dedupe` + unit test + 3 case group đầu |
 |   3 | Khương Hoàng Nguyên | 2A202603987 | 26ai.nguyenkh@vinuni.edu.vn | `NguyenGL03` | CP3 test challenge + sửa bug tool có sẵn, CP4 eval group, live chat + Telegram thật, bonus Small Local Model, báo cáo |
 
 ## Cá nhân
@@ -39,7 +39,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 - Commit `7cd8f4b`; `starter_v0/runs/v0…v3_B_base_openrouter_*.json`; `starter_v0/artifacts/version_log.csv`.
 
-## w3schools-test _(HoVaTen-MSSV: thành viên tự điền)_
+## TrinhNgocNinh-2A202603996
 
 ### Phần việc phụ trách
 
@@ -51,7 +51,7 @@ Ví dụ: `report/team/20241234_NguyenVanAn.md`.
 
 ### Bằng chứng
 
-- Commit `2636ec9`, `2d3ddf1`; `starter_v0/tools/{text_stats,date_diff,dedupe}/`.
+- Commit `2636ec9`, `2d3ddf1` (tác giả git `w3schools-test`); `starter_v0/tools/{text_stats,date_diff,dedupe}/`; [report/team/2A202603996_TrinhNgocNinh.md](report/team/2A202603996_TrinhNgocNinh.md).
 
 ## KhuongHoangNguyen-2A202603987
 
